@@ -18,7 +18,7 @@
 
 ## Diccionarios
 
-1. Implementar un diccionario sobre una tabla de hashing genérica, como la vista en Tablas de Hashing.
+1. Implementar un diccionario sobre una tabla de hash genérica, como la vista en Tablas de Hash.
 
 2. Analizar el orden de todas las operaciones.
 
