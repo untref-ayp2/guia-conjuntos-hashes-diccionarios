@@ -8,11 +8,11 @@
 4. Implementar un conjunto basado en listas enlazadas. Implementar tantos las operaciones sobre elementos como las operaciones entre conjuntos ([`set/listset.go`](set/listset.go)).
 5. Comparar el orden de las operaciones entre las implementaciones de arreglos y listas enlazadas.
 
-## _Hashe Tables_
+## _Hash Tables_
 
-1. Modificar la tabla de _hash_ abierto para que las claves puedan ser de distintos tipos (usar el paquete [`maphash`](https://pkg.go.dev/hash/maphash) de Go).
+1. Modificar la tabla de _hash_ cerrada para que las claves puedan ser de distintos tipos (usar el paquete [`maphash`](https://pkg.go.dev/hash/maphash) de Go).
 
-2. Implementar una tabla de _hash_ cerrada. Para ello se debe implementar una lista enlazada que almacene los elementos en cada posición del arreglo. Cuando se produce una colisión, el nuevo elemento se agrega a la lista en la posición correspondiente. La tabla debe tener los mismos métodos que la tabla de _hash_ abierta: `Put`, `Get`, `Remove`, `Keys`, `Values`, `Size`, `IsEmpty`, `Clear` y `String`. Las claves deben ser de cualquier tipo.
+2. Implementar una tabla de _hash_ abierta. Para ello se debe implementar una lista enlazada que almacene los elementos en cada posición del arreglo. Cuando se produce una colisión, el nuevo elemento se agrega a la lista en la posición correspondiente. La tabla debe tener los mismos métodos que la tabla de _hash_ cerrada: `Put`, `Get`, `Remove`, `Keys`, `Values`, `Size`, `IsEmpty`, `Clear` y `String`. Las claves deben ser de cualquier tipo.
 
 3. Escribir casos de pruebas que cubran todas las operaciones de los puntos anteriores.
 

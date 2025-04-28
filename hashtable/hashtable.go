@@ -1,4 +1,4 @@
-// Paquete hashtable proporciona una implementación de una tabla hash abierta
+// Paquete hashtable proporciona una implementación de una tabla hash cerrada
 // cuyas claves son cadenas de caracteres y los valores pueden ser
 // de cualquier tipo. La tabla utiliza un arreglo para almacenar
 // pares clave-valor.
@@ -6,7 +6,7 @@
 // hashTableEntry representa un único nodo en la tabla hash, que contiene una clave
 // y su valor asociado.
 //
-// HashTable es una tabla hash abierta que utiliza un arreglo para almacenar elementos.
+// HashTable es una tabla hash cerrada que utiliza un arreglo para almacenar elementos.
 // La tabla solo soporta string como claves y cualquier tipo como valores.
 
 package hashtable
@@ -24,7 +24,7 @@ type hashTableEntry[K string, V any] struct {
 	value V
 }
 
-// HashTable es una tabla de hash abierta. En cada posición
+// HashTable es una tabla de hash cerrada. En cada posición
 // del arreglo se almacena un par clave-valor.
 type HashTable[K string, V any] struct {
 	// arreglo de entradas de la tabla hash.
@@ -39,7 +39,7 @@ type HashTable[K string, V any] struct {
 	threshold uint
 }
 
-// NewHashTable crea una nueva tabla de hash abierta con la capacidad y el factor de carga especificados.
+// NewHashTable crea una nueva tabla de hash cerrada con la capacidad y el factor de carga especificados.
 // Si la capacidad es igual a 0, se establece en 17.
 // Si el factor de carga es menor o igual a 0 o mayor que 1, se establece en 0.75.
 // Si la capacidad no es un número primo, se redimensiona a la siguiente capacidad
