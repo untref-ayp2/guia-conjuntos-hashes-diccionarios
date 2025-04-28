@@ -1,7 +1,8 @@
 package set
 
-// Set implementa un conjunto sobre una lista enlazada simple.
+// Set implementa un conjunto sobre un map.
 type Set[T comparable] struct {
+	// Implementar
 }
 
 // NewSet crea un nuevo conjunto vacío y lo inicializa con los elementos especificados.
