@@ -6,7 +6,7 @@ type IntSet struct {
 
 func NewIntSet(elements ...int) *IntSet {
 	s := &IntSet{elements: make(map[int]bool)}
-	for v := range elements {
+	for _, v := range elements {
 		s.Add(v)
 	}
 	return s

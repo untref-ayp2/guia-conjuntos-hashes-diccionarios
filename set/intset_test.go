@@ -159,7 +159,7 @@ func TestDifference(t *testing.T) {
 	require.NotNil(t, result2)
 	assert.Equal(t, 4, result2.Size())
 	for _, v := range []int{1, 2, 4, 7} {
-		assert.True(t, result1.Contains(v))
+		assert.True(t, result2.Contains(v))
 	}
 }
 
@@ -183,7 +183,7 @@ func TestSymmetricDifference(t *testing.T) {
 	require.NotNil(t, result2)
 	assert.Equal(t, 6, result2.Size())
 	for _, v := range []int{1, 2, 3, 4, 7, 11} {
-		assert.True(t, result1.Contains(v))
+		assert.True(t, result2.Contains(v))
 	}
 }
 
