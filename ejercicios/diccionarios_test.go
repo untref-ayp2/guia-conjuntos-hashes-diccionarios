@@ -2,10 +2,10 @@ package ejercicios
 
 import (
 	"testing"
+	"untref-ayp2/guia-conjuntos-hashes-diccionarios/dictionary"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/untref-ayp2/data-structures/dictionary"
 )
 
 func TestTraducir(t *testing.T) {

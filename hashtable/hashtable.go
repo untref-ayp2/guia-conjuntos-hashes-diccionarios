@@ -8,7 +8,6 @@
 //
 // HashTable es una tabla hash cerrada que utiliza un arreglo para almacenar elementos.
 // La tabla solo soporta string como claves y cualquier tipo como valores.
-
 package hashtable
 
 import (
