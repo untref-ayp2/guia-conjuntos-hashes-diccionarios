@@ -1,13 +1,6 @@
-// Paquete hashtable proporciona una implementación de una tabla hash cerrada
-// cuyas claves son cadenas de caracteres y los valores pueden ser
-// de cualquier tipo. La tabla utiliza un arreglo para almacenar
-// pares clave-valor.
-//
-// hashTableEntry representa un único nodo en la tabla hash, que contiene una clave
-// y su valor asociado.
-//
-// HashTable es una tabla hash cerrada que utiliza un arreglo para almacenar elementos.
-// La tabla solo soporta string como claves y cualquier tipo como valores.
+// hashtable proporciona una implementación de una tabla hash cerrada cuyas
+// claves son cadenas de caracteres y los valores pueden ser de cualquier tipo.
+// La tabla utiliza un arreglo para almacenar pares clave-valor.
 package hashtable
 
 import (
@@ -15,16 +8,19 @@ import (
 	"math"
 )
 
-const a = 11 // a es una constante utilizada para calcular el hash de una cadena de caracteres
+// a es una constante utilizada para calcular el hash de un string
+const a = 11
 
-// hashTableEntry representa una entrada en la tabla hash, que contiene una clave y su valor asociado.
+// hashTableEntry representa una entrada en la tabla hash, que contiene una
+// clave y su valor asociado.
 type hashTableEntry[K string, V any] struct {
 	key   K
 	value V
 }
 
-// HashTable es una tabla de hash cerrada. En cada posición
-// del arreglo se almacena un par clave-valor.
+// HashTable es una tabla hash cerrada que utiliza un arreglo para almacenar
+// elementos. La tabla solo soporta string como claves y cualquier tipo como
+// valores. En cada posición del arreglo se almacena un par clave-valor.
 type HashTable[K string, V any] struct {
 	// arreglo de entradas de la tabla hash.
 	buckets []*hashTableEntry[K, V]
@@ -38,11 +34,16 @@ type HashTable[K string, V any] struct {
 	threshold uint
 }
 
-// NewHashTable crea una nueva tabla de hash cerrada con la capacidad y el factor de carga especificados.
-// Si la capacidad es igual a 0, se establece en 17.
-// Si el factor de carga es menor o igual a 0 o mayor que 1, se establece en 0.75.
-// Si la capacidad no es un número primo, se redimensiona a la siguiente capacidad
-// primo mayor o igual a la capacidad especificada.
+// NewHashTable crea una nueva tabla de hash cerrada con la capacidad y el
+// factor de carga especificados.
+//
+// - Si la capacidad es igual a 0, se establece en 17.
+//
+// - Si el factor de carga es menor o igual a 0 o mayor que 1, se establece en
+// 0.75.
+//
+// - Si la capacidad no es un número primo, se redimensiona a la siguiente
+// capacidad primo mayor o igual a la capacidad especificada.
 func NewHashTable[K string, V any](capacity uint, loadFactor float32) *HashTable[K, V] {
 	if capacity == 0 {
 		capacity = 17
@@ -62,16 +63,18 @@ func NewHashTable[K string, V any](capacity uint, loadFactor float32) *HashTable
 	}
 }
 
-// Put agrega un nuevo par clave-valor a la tabla de hash. Si la clave ya existe,
-// actualiza el valor asociado a la clave.
+// Put agrega un nuevo par clave-valor a la tabla de hash. Si la clave ya
+// existe, actualiza el valor asociado a la clave.
+//
 // Devuelve true si se agregó o actualizó el elemento, false si la clave es nula.
-// Si la tabla de hash está llena, se redimensiona automáticamente.
-// Si la clave es nula, no se agrega nada.
-
-func (ht *HashTable[K, V]) Put(key K, value V) {
+//
+// - Si la tabla de hash está llena, se redimensiona automáticamente.
+//
+// - Si la clave es nula, no se agrega nada.
+func (ht *HashTable[K, V]) Put(key K, value V) bool {
 	// Si la clave es nula, no se agrega nada.
 	if key == "" {
-		return
+		return false
 	}
 	// Si la tabla de hash está llena, redimensionamos.
 	if ht.size >= ht.threshold {
@@ -81,45 +84,45 @@ func (ht *HashTable[K, V]) Put(key K, value V) {
 	index := ht.hash(key) % ht.capacity
 	for {
 		if ht.buckets[index] == nil || ht.buckets[index].key == "" {
-			// Si el bucket está vacío, insertamos el nuevo par clave-valor.
+			// Si el bucket está vacío o la clave es nula, insertamos el nuevo elemento.
 			ht.buckets[index] = &hashTableEntry[K, V]{key: key, value: value}
 			ht.size++
-			return
+			return true
 		} else if ht.buckets[index].key == key {
 			// Si la clave ya existe, actualizamos el valor.
 			ht.buckets[index].value = value
-			return
+			return true
 		}
 		// Si el bucket está ocupado y la clave no coincide, probamos el siguiente índice.
 		index = (index + 1) % ht.capacity
 	}
 }
 
-// Get devuelve el valor asociado a la clave dada y true para indicar que encontró
-// la clave buscada.
-// Si la clave no existe o es nula, devuelve false y un valor nulo.
-
+// Get devuelve el valor asociado a la clave dada y true para indicar que
+// encontró la clave buscada.
+//
+// - Si la clave no existe o es nula, devuelve false y un valor nulo.
 func (ht *HashTable[K, V]) Get(key K) (V, bool) {
-	var zeroValue V
-
-	index, esta := ht.getIndex(key)
-	if esta {
-		return ht.buckets[index].value, esta
+	index, exists := ht.getIndex(key)
+	if !exists {
+		var zeroValue V
+		return zeroValue, exists
 	}
-	return zeroValue, esta
+	return ht.buckets[index].value, exists
 }
 
-// Remove elimina el par clave-valor asociado a la clave dada. Devuelve true si se eliminó
-// el elemento, false si la clave no existe.
+// Remove elimina el par clave-valor asociado a la clave dada.
+//
+// Devuelve true si se eliminó el elemento, false si la clave no existe.
 func (ht *HashTable[K, V]) Remove(key K) bool {
-	var zeroValue V
-	index, esta := ht.getIndex(key)
-	if esta {
+	index, exists := ht.getIndex(key)
+	if exists {
+		var zeroValue V
 		ht.buckets[index].key = "" //marca la clave como nula para indicar que fue eliminada
 		ht.buckets[index].value = zeroValue
 		ht.size--
 	}
-	return esta
+	return exists
 }
 
 // Keys devuelve una lista de todas las claves en la tabla de hash.
@@ -178,6 +181,7 @@ func (ht *HashTable[K, V]) String() string {
 // Funciones privadas //////////////////////////////////////////////////////////
 
 // hash calcula el índice del bucket para una clave dada.
+//
 // Se utiliza la técnica de Mulitiplicación Polinómica.
 func (ht *HashTable[K, V]) hash(key K) uint {
 	var hash uint = 0
@@ -190,8 +194,8 @@ func (ht *HashTable[K, V]) hash(key K) uint {
 	return hash
 }
 
-// getIndex devuelve el índice del bucket para una clave dada.
-// y un booleano que indica si la clave existe.
+// getIndex devuelve el índice del bucket para una clave dada y un booleano que
+// indica si la clave existe.
 func (ht *HashTable[K, V]) getIndex(key K) (uint, bool) {
 	if key == "" {
 		return 0, false
@@ -204,13 +208,13 @@ func (ht *HashTable[K, V]) getIndex(key K) (uint, bool) {
 	return 0, false
 }
 
-// resize redimensiona la tabla de hash y reubica todos los
-// elementos en la nueva tabla.
-// El nuevo tamaño es el siguiente número primo mayor o igual
-// al doble de la capacidad actual.
+// resize redimensiona la tabla de hash y reubica todos los elementos en la
+// nueva tabla.
+//
+// El nuevo tamaño es el siguiente número primo mayor o igual al doble de la
+// capacidad actual.
 func (ht *HashTable[K, V]) resize() {
-	newCapacity := ht.capacity * 2
-	newCapacity = nextPrime(newCapacity)
+	newCapacity := nextPrime(ht.capacity * 2)
 	newBuckets := make([]*hashTableEntry[K, V], newCapacity)
 
 	// Reinsertar todos los elementos en el nuevo arreglo, manejando colisiones
