@@ -8,9 +8,6 @@ import (
 	"math"
 )
 
-// a es una constante utilizada para calcular el hash de un string
-const a = 11
-
 // hashTableEntry representa una entrada en la tabla hash, que contiene una
 // clave y su valor asociado.
 type hashTableEntry[K string, V any] struct {
@@ -180,17 +177,18 @@ func (ht *HashTable[K, V]) String() string {
 
 // Funciones privadas //////////////////////////////////////////////////////////
 
+// a es una constante utilizada para calcular el hash de un string
+const a float64 = 11.0
+
 // hash calcula el índice del bucket para una clave dada.
 //
 // Se utiliza la técnica de Mulitiplicación Polinómica.
 func (ht *HashTable[K, V]) hash(key K) uint {
+	l := len(key)
 	var hash uint = 0
-	var l = len(key) // longitud de la clave
-
 	for i, c := range key {
-		hash += uint(c) * uint(math.Pow(float64(a), float64(l-i-1)))
+		hash += uint(c) * uint(math.Pow(a, float64(l-i-1)))
 	}
-
 	return hash
 }
 
