@@ -80,7 +80,7 @@ func (ht *HashTable[K, V]) Put(key K, value V) {
 
 	index := ht.hash(key) % ht.capacity
 	for {
-		if ht.buckets[index] == nil {
+		if ht.buckets[index] == nil || ht.buckets[index].key == "" {
 			// Si el bucket está vacío, insertamos el nuevo par clave-valor.
 			ht.buckets[index] = &hashTableEntry[K, V]{key: key, value: value}
 			ht.size++
@@ -117,6 +117,7 @@ func (ht *HashTable[K, V]) Remove(key K) bool {
 	if esta {
 		ht.buckets[index].key = "" //marca la clave como nula para indicar que fue eliminada
 		ht.buckets[index].value = zeroValue
+		ht.size--
 	}
 	return esta
 }
